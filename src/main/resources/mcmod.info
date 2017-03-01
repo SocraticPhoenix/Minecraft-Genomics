@@ -1,0 +1,16 @@
+[
+{
+  "modid": "mobdna",
+  "name": "Minecraft Genomics",
+  "description": "Modifies vanilla breeding behavior and adds genetics to all mobs.",
+  "version": "0.0.0",
+  "mcversion": "1.11.2",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Socratic_Phoenix"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
