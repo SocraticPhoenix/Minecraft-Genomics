@@ -27,6 +27,7 @@ import com.gmail.socraticphoenix.forge.mobdna.dna.GeneHandler;
 import com.gmail.socraticphoenix.forge.mobdna.dna.impl.SimpleAllele;
 import com.gmail.socraticphoenix.forge.mobdna.dna.impl.SimpleGene;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.monster.EntityHusk;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.monster.EntityZombieVillager;
@@ -36,10 +37,12 @@ import java.util.List;
 import java.util.Random;
 
 public class ZombieVariantGeneHandler implements GeneHandler {
-    public static final Gene ZOMBIE_VARIANT_GENE = new SimpleGene("zombie_varient", "zombVar", "The gene for zombie variant, including pig, villager, and normal", new ZombieVariantGeneHandler(), 0);
-    public static final Allele VILLAGER = new SimpleAllele(0, "vil", "Expresses the villager zombie phenotype", 1, false, ZOMBIE_VARIANT_GENE);
+    public static final Gene ZOMBIE_VARIANT_GENE = new SimpleGene("zombie_variant", "zombVar", "The gene for zombie variant, including pig, villager, and normal", new ZombieVariantGeneHandler(), 0);
+    public static final Allele VILLAGER = new SimpleAllele(0, "vil", "Expresses the villager zombie phenotype", 2, false, ZOMBIE_VARIANT_GENE);
     public static final Allele PIG = new SimpleAllele(1, "pig", "Expresses the pig zombie phenotype", 0, false, ZOMBIE_VARIANT_GENE);
-    public static final Allele ZOMBIE = new SimpleAllele(2, "zom", "Expresses the normal zombie phenotype", 2, false, ZOMBIE_VARIANT_GENE);
+    public static final Allele ZOMBIE = new SimpleAllele(2, "zom", "Expresses the normal zombie phenotype", 3, false, ZOMBIE_VARIANT_GENE);
+    public static final Allele HUSK = new SimpleAllele(3, "hsk", "Expresses the husk zombie phenotype", 1, false, ZOMBIE_VARIANT_GENE);
+    private static final Allele[] VILLAGE_RAND = new Allele[]{VILLAGER, PIG, HUSK};
 
     @Override
     public void setup(EntityCreature creature, Random random, Allele... alleles) {
@@ -48,14 +51,16 @@ public class ZombieVariantGeneHandler implements GeneHandler {
 
     @Override
     public EntityCreature modifySpawn(EntityCreature creature, Random random, Allele... alleles) {
-        if(creature instanceof EntityZombie) {
+        if (creature instanceof EntityZombie) {
             EntityZombie zombie = (EntityZombie) creature;
             Allele dominant = Allele.dominant(alleles);
-            if (dominant == VILLAGER) {
+            if (dominant == HUSK) {
+                return new EntityHusk(zombie.world);
+            } else if (dominant == VILLAGER) {
                 return new EntityZombieVillager(zombie.world);
-            } else if(dominant == PIG) {
+            } else if (dominant == PIG) {
                 return new EntityPigZombie(zombie.world);
-            } else {
+            } else if (dominant == ZOMBIE) {
                 return new EntityZombie(zombie.world);
             }
         }
@@ -66,10 +71,13 @@ public class ZombieVariantGeneHandler implements GeneHandler {
     @Override
     public List<Allele> obtainAlleles(EntityCreature creature, Random random) {
         List<Allele> alleles = new ArrayList<>();
-        if(creature instanceof EntityZombie) {
-            if(creature instanceof EntityZombieVillager) {
+        if (creature instanceof EntityZombie) {
+            if (creature instanceof EntityHusk) {
+                alleles.add(HUSK);
+                alleles.add(random.nextBoolean() ? HUSK : PIG);
+            } else if (creature instanceof EntityZombieVillager) {
                 alleles.add(VILLAGER);
-                alleles.add(random.nextBoolean() ? VILLAGER : PIG);
+                alleles.add(VILLAGE_RAND[random.nextInt(VILLAGE_RAND.length)]);
             } else if (creature instanceof EntityPigZombie) {
                 alleles.add(PIG);
                 alleles.add(PIG);

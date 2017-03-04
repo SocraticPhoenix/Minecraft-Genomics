@@ -23,10 +23,14 @@ package com.gmail.socraticphoenix.forge.mobdna;
 
 import com.gmail.socraticphoenix.forge.mobdna.ai.AIApplicator;
 import com.gmail.socraticphoenix.forge.mobdna.ai.BreedingUpdater;
-import com.gmail.socraticphoenix.forge.mobdna.capability.GenomeApplicator;
-import com.gmail.socraticphoenix.forge.mobdna.capability.GenomeHandler;
-import com.gmail.socraticphoenix.forge.mobdna.capability.GenomeHandlerImpl;
-import com.gmail.socraticphoenix.forge.mobdna.capability.GenomeStorage;
+import com.gmail.socraticphoenix.forge.mobdna.capability.genome.GenomeApplicator;
+import com.gmail.socraticphoenix.forge.mobdna.capability.genome.GenomeHandler;
+import com.gmail.socraticphoenix.forge.mobdna.capability.genome.GenomeHandlerImpl;
+import com.gmail.socraticphoenix.forge.mobdna.capability.genome.GenomeStorage;
+import com.gmail.socraticphoenix.forge.mobdna.capability.setup.SetupApplicator;
+import com.gmail.socraticphoenix.forge.mobdna.capability.setup.SetupHandler;
+import com.gmail.socraticphoenix.forge.mobdna.capability.setup.SetupHandlerImpl;
+import com.gmail.socraticphoenix.forge.mobdna.capability.setup.SetupStorage;
 import com.gmail.socraticphoenix.forge.mobdna.dna.GeneApplicator;
 import com.gmail.socraticphoenix.forge.mobdna.module.ZombieGrower;
 import net.minecraftforge.common.MinecraftForge;
@@ -49,6 +53,7 @@ public class MobDNA {
         MinecraftForge.EVENT_BUS.register(new AIApplicator());
         MinecraftForge.EVENT_BUS.register(new BreedingUpdater());
         MinecraftForge.EVENT_BUS.register(new GenomeApplicator());
+        MinecraftForge.EVENT_BUS.register(new SetupApplicator());
         MinecraftForge.EVENT_BUS.register(new GeneApplicator());
         MinecraftForge.EVENT_BUS.register(new ZombieGrower());
         this.configuration = new Configuration(new File("config" + File.separator + "mobdna" + File.separator + "conf.cfg"));
@@ -66,8 +71,42 @@ public class MobDNA {
         if(!category.containsKey("grow_zombies")) {
             category.put("grow_zombies", new Property("grow_zombies", "true", Property.Type.BOOLEAN));
         }
+        if(!category.containsKey("maxBreedWait")) {
+            category.put("maxBreedWait", new Property("maxBreedWait", String.valueOf((20 * 60) * 20), Property.Type.INTEGER));
+        }
+        if(!category.containsKey("minBreedWait")) {
+            category.put("minBreedWait", new Property("minBreedWait", String.valueOf((20 * 60) * 5), Property.Type.INTEGER));
+        }
+        if(!category.containsKey("zombieChildDelay")) {
+            category.put("zombieChildDelay", new Property("zombieChildDelay", String.valueOf(24000), Property.Type.INTEGER));
+        }
+        if(!category.containsKey("ageableAnimalDelay")) {
+            category.put("ageableAnimalDelay", new Property("ageableAnimalDelay", String.valueOf(24000), Property.Type.INTEGER));
+        }
+        this.configuration.save();
         CapabilityManager.INSTANCE.register(GenomeHandler.class, new GenomeStorage(), GenomeHandlerImpl.class);
+        CapabilityManager.INSTANCE.register(SetupHandler.class, new SetupStorage(), SetupHandlerImpl.class);
 
+    }
+
+    public static int get(String key) {
+        return MobDNA.instance.configuration.getCategory("config").get(key).getInt();
+    }
+
+    public static int maxBreedWait() {
+        return get("maxBreedWait");
+    }
+
+    public static int minBreedWait() {
+        return get("minBreedWait");
+    }
+
+    public static int zombieChildDelay() {
+        return get("zombieChildDelay");
+    }
+
+    public static int ageableAnimalDelay() {
+        return -get("ageableAnimalDelay");
     }
 
     public boolean growsZombies() {
@@ -75,3 +114,5 @@ public class MobDNA {
     }
 
 }
+
+

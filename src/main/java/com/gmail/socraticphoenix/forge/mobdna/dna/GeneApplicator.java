@@ -21,8 +21,10 @@
  */
 package com.gmail.socraticphoenix.forge.mobdna.dna;
 
-import com.gmail.socraticphoenix.forge.mobdna.capability.GenomeHandler;
-import com.gmail.socraticphoenix.forge.mobdna.capability.GenomeProvider;
+import com.gmail.socraticphoenix.forge.mobdna.capability.genome.GenomeHandler;
+import com.gmail.socraticphoenix.forge.mobdna.capability.genome.GenomeProvider;
+import com.gmail.socraticphoenix.forge.mobdna.capability.setup.SetupHandler;
+import com.gmail.socraticphoenix.forge.mobdna.capability.setup.SetupProvider;
 import com.gmail.socraticphoenix.forge.mobdna.dna.impl.GenomeFactory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -37,13 +39,21 @@ public class GeneApplicator {
         Entity entity = ev.getEntity();
         if(!entity.world.isRemote && entity instanceof EntityCreature) {
             EntityCreature creature = (EntityCreature) entity;
+            GenomeHandler handler = creature.getCapability(GenomeProvider.GENOME_HANDLER_CAPABILITY, EnumFacing.DOWN);
             if(!creature.getEntityData().getBoolean("mobdna_considered")) {
                 creature.getEntityData().setBoolean("mobdna_considered", true);
-                GenomeHandler handler = creature.getCapability(GenomeProvider.GENOME_HANDLER_CAPABILITY, EnumFacing.DOWN);
                 handler.setGenome(GenomeFactory.createGenome(creature));
+            }
+
+            if(!this.data(creature).isSetup()) {
+                this.data(creature).setSetup(true);
                 handler.setup(creature);
             }
         }
+    }
+
+    private SetupHandler data(EntityCreature creature) {
+        return creature.getCapability(SetupProvider.GENOME_HANDLER_CAPABILITY, EnumFacing.DOWN);
     }
 
 }

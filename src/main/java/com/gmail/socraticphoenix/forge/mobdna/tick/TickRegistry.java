@@ -19,29 +19,7 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.gmail.socraticphoenix.forge.mobdna.module;
+package com.gmail.socraticphoenix.forge.mobdna.tick;
 
-import com.gmail.socraticphoenix.forge.mobdna.MobDNA;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-public class ZombieGrower {
-
-    @SubscribeEvent
-    public void onUpdate(LivingEvent.LivingUpdateEvent ev) {
-        Entity entity = ev.getEntity();
-        if(!entity.world.isRemote && entity instanceof EntityZombie && MobDNA.getInstance().growsZombies() && ((EntityZombie) entity).isChild()) {
-            EntityZombie child = (EntityZombie) entity;
-            if(!child.getEntityData().hasKey("mobdna_zombie_age")) {
-                child.getEntityData().setInteger("mobdna_zombie_age", MobDNA.zombieChildDelay());
-            } else if(child.getEntityData().getInteger("mobdna_zombie_age") <= 0) {
-                child.setChild(false);
-            } else {
-                child.getEntityData().setInteger("mobdna_zombie_age", child.getEntityData().getInteger("mobdna_zombie_age") - 1);
-            }
-        }
-    }
-
+public class TickRegistry {
 }

@@ -37,6 +37,8 @@ public interface Allele extends GeneticComponent {
 
     boolean dominateTo(Allele other);
 
+
+
     default boolean recessiveTo(Allele other) {
         return other.dominateTo(this);
     }

@@ -19,38 +19,46 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.gmail.socraticphoenix.forge.mobdna.capability;
+package com.gmail.socraticphoenix.forge.mobdna.capability.genome;
 
-import com.gmail.socraticphoenix.forge.mobdna.dna.Genome;
-import com.gmail.socraticphoenix.forge.mobdna.dna.impl.GenomeFactory;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class GenomeStorage implements Capability.IStorage<GenomeHandler> {
+public class GenomeProvider implements ICapabilitySerializable<NBTBase> {
+    @CapabilityInject(GenomeHandler.class)
+    public static final Capability<GenomeHandler> GENOME_HANDLER_CAPABILITY = null;
 
-    @Nullable
-    @Override
-    public NBTBase writeNBT(Capability<GenomeHandler> capability, GenomeHandler instance, EnumFacing side) {
-        NBTTagCompound compound = new NBTTagCompound();
-        compound.setBoolean("mating", instance.mating());
-        NBTTagCompound genome = new NBTTagCompound();
-        instance.genome().write(genome);
-        compound.setTag("genome", genome);
-        return compound;
+    private GenomeHandler instance;
+
+    public GenomeProvider() {
+        this.instance = new GenomeHandlerImpl(false);
     }
 
     @Override
-    public void readNBT(Capability<GenomeHandler> capability, GenomeHandler instance, EnumFacing side, NBTBase nbt) {
-        if(nbt instanceof NBTTagCompound) {
-            NBTTagCompound compound = (NBTTagCompound) nbt;
-            instance.setMating(compound.getBoolean("mating"));
-            Genome genome = GenomeFactory.from(compound.getCompoundTag("genome"));
-            instance.setGenome(genome);
-        }
+    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+        return capability == GENOME_HANDLER_CAPABILITY;
+    }
+
+    @Nullable
+    @Override
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+        return capability == GENOME_HANDLER_CAPABILITY ? GENOME_HANDLER_CAPABILITY.cast(this.instance) : null;
+    }
+
+    @Override
+    public NBTBase serializeNBT() {
+        return GENOME_HANDLER_CAPABILITY.getStorage().writeNBT(GENOME_HANDLER_CAPABILITY, this.instance, null);
+    }
+
+    @Override
+    public void deserializeNBT(NBTBase nbt) {
+        GENOME_HANDLER_CAPABILITY.getStorage().readNBT(GENOME_HANDLER_CAPABILITY, this.instance, null, nbt);
     }
 
 }

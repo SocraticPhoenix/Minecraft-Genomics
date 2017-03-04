@@ -19,24 +19,19 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.gmail.socraticphoenix.forge.mobdna.capability;
+package com.gmail.socraticphoenix.forge.mobdna.capability.setup;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+public class SetupHandlerImpl implements SetupHandler {
+    private boolean setup;
 
-public class GenomeApplicator {
-
-    public static final ResourceLocation GENOME_HANDLER = new ResourceLocation("mobdna", "genome_handler");
-
-    @SubscribeEvent
-    public void attachCapability(AttachCapabilitiesEvent<Entity> event) {
-        if(event.getObject() instanceof EntityCreature) {
-            event.addCapability(GENOME_HANDLER, new GenomeProvider());
-        }
+    @Override
+    public boolean isSetup() {
+        return this.setup;
     }
 
+    @Override
+    public void setSetup(boolean setup) {
+        this.setup = setup;
+    }
 
 }

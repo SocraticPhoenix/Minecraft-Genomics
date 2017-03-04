@@ -40,8 +40,8 @@ public class DiploidGenome implements Genome {
         this.left = new ArrayList<>();
         this.right = new ArrayList<>();
         this.genome = new ArrayList<>();
-        this.genome.add(left);
-        this.genome.add(right);
+        this.genome.add(this.left);
+        this.genome.add(this.right);
     }
 
     @Override
@@ -102,4 +102,5 @@ public class DiploidGenome implements Genome {
         }
         return genome;
     }
+
 }

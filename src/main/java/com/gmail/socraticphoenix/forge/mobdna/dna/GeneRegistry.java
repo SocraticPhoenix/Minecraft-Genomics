@@ -21,6 +21,9 @@
  */
 package com.gmail.socraticphoenix.forge.mobdna.dna;
 
+import com.gmail.socraticphoenix.forge.mobdna.dna.genes.CowVariantGeneHandler;
+import com.gmail.socraticphoenix.forge.mobdna.dna.genes.SkeletonVariantGeneHandler;
+import com.gmail.socraticphoenix.forge.mobdna.dna.genes.SpiderVariantGeneHandler;
 import com.gmail.socraticphoenix.forge.mobdna.dna.genes.ZombieVariantGeneHandler;
 import com.gmail.socraticphoenix.forge.mobdna.dna.impl.GenomeFactory;
 
@@ -50,6 +53,9 @@ public class GeneRegistry {
 
     private void registerDefaults() {
         this.register(ZombieVariantGeneHandler.ZOMBIE_VARIANT_GENE);
+        this.register(CowVariantGeneHandler.COW_VARIANT_GENE);
+        this.register(SkeletonVariantGeneHandler.SKELETON_VARIANT_GENE);
+        this.register(SpiderVariantGeneHandler.SPIDER_VARIANT_GENE);
     }
 
     public List<Gene> getGenesByChromosome(int chromosome) {

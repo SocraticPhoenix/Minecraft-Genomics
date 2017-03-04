@@ -19,7 +19,7 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.gmail.socraticphoenix.forge.mobdna.capability;
+package com.gmail.socraticphoenix.forge.mobdna.capability.genome;
 
 import com.gmail.socraticphoenix.forge.mobdna.dna.Allele;
 import com.gmail.socraticphoenix.forge.mobdna.dna.Chromosome;
@@ -62,7 +62,7 @@ public class GenomeHandlerImpl implements GenomeHandler {
     public EntityCreature doSpawn(EntityCreature self) {
         EntityCreature creature = self;
         for (int j = 0; j < this.genome().chromosomes().size(); j++) {
-            Chromosome left = this.genome().chromosomes().get(0).get(j);
+            Chromosome left = this.genome.chromosomes().get(0).get(j);
             Chromosome right = this.genome.chromosomes().get(1).get(j);
             for (int i = 0; i < Math.max(left.alleles().size(), right.alleles().size()); i++) {
                 Allele leftAllele = left.alleles().get(i);

@@ -26,6 +26,8 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIMate;
 import net.minecraft.entity.ai.EntityAITasks;
+import net.minecraft.entity.monster.AbstractSkeleton;
+import net.minecraft.entity.monster.EntityShulker;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -47,7 +49,11 @@ public class AIApplicator {
                     }
                 }
 
-                tasks.addTask(1, new AIEntityBreed(creature, 1, creature.getClass()));
+                tasks.addTask(1, new AIEntityBreed(creature, 1, creature instanceof AbstractSkeleton ? AbstractSkeleton.class : creature.getClass()));
+
+                if(entity instanceof EntityShulker) {
+                    tasks.addTask(1, new AIShulkerTeleport((EntityShulker) creature));
+                }
             }
         }
     }

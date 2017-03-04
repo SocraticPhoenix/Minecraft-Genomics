@@ -21,8 +21,9 @@
  */
 package com.gmail.socraticphoenix.forge.mobdna.ai;
 
-import com.gmail.socraticphoenix.forge.mobdna.capability.GenomeHandler;
-import com.gmail.socraticphoenix.forge.mobdna.capability.GenomeProvider;
+import com.gmail.socraticphoenix.forge.mobdna.MobDNA;
+import com.gmail.socraticphoenix.forge.mobdna.capability.genome.GenomeHandler;
+import com.gmail.socraticphoenix.forge.mobdna.capability.genome.GenomeProvider;
 import com.gmail.socraticphoenix.forge.mobdna.util.ProbabilityHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -31,8 +32,6 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class BreedingUpdater {
-    private static int min = 40;
-    private static int max = 45;
 
     @SubscribeEvent
     public void onUpdate(LivingEvent.LivingUpdateEvent ev) {
@@ -41,10 +40,10 @@ public class BreedingUpdater {
             EntityCreature creature = (EntityCreature) entity;
             if(!this.data(creature).mating()) {
                 if (!creature.getEntityData().hasKey("mobdna_delay")) {
-                    this.setDelay(creature, (int) ProbabilityHelper.rand(min, max, creature.getRNG()));
+                    this.setDelay(creature, (int) ProbabilityHelper.rand(MobDNA.minBreedWait(), MobDNA.maxBreedWait(), creature.getRNG()));
                 } else if (this.delay(creature) == 0) {
                     this.data(creature).setMating(true);
-                    this.setDelay(creature, (int) ProbabilityHelper.rand(min, max, creature.getRNG()));
+                    this.setDelay(creature, (int) ProbabilityHelper.rand(MobDNA.minBreedWait(), MobDNA.maxBreedWait(), creature.getRNG()));
                 } else {
                     this.setDelay(creature, this.delay(creature) - 1);
                 }

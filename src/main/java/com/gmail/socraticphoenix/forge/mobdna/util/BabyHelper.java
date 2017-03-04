@@ -21,8 +21,8 @@
  */
 package com.gmail.socraticphoenix.forge.mobdna.util;
 
-import com.gmail.socraticphoenix.forge.mobdna.capability.GenomeHandler;
-import com.gmail.socraticphoenix.forge.mobdna.capability.GenomeProvider;
+import com.gmail.socraticphoenix.forge.mobdna.capability.genome.GenomeHandler;
+import com.gmail.socraticphoenix.forge.mobdna.capability.genome.GenomeProvider;
 import com.gmail.socraticphoenix.forge.mobdna.dna.impl.DiploidGenome;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.util.EnumFacing;
@@ -46,7 +46,6 @@ public class BabyHelper {
             }
             baby = handler.doSpawn(baby);
             BabyRegistry.INSTANCE.modify(baby);
-            handler.setup(baby);
             baby.setLocationAndAngles((left.posX + right.posX) / 2, Math.max(left.posY, right.posY), (left.posZ + right.posZ) / 2, baby.rotationYaw, baby.rotationPitch);
             baby.getEntityData().setBoolean("mobdna_considered", true);
             world.spawnEntity(baby);

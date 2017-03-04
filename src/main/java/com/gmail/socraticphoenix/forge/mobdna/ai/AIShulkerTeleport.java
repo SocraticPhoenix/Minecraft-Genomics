@@ -19,29 +19,34 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.gmail.socraticphoenix.forge.mobdna.module;
+package com.gmail.socraticphoenix.forge.mobdna.ai;
 
-import com.gmail.socraticphoenix.forge.mobdna.MobDNA;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.entity.MoverType;
+import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.monster.EntityShulker;
 
-public class ZombieGrower {
+public class AIShulkerTeleport extends EntityAIBase {
+    private EntityShulker shulker;
 
-    @SubscribeEvent
-    public void onUpdate(LivingEvent.LivingUpdateEvent ev) {
-        Entity entity = ev.getEntity();
-        if(!entity.world.isRemote && entity instanceof EntityZombie && MobDNA.getInstance().growsZombies() && ((EntityZombie) entity).isChild()) {
-            EntityZombie child = (EntityZombie) entity;
-            if(!child.getEntityData().hasKey("mobdna_zombie_age")) {
-                child.getEntityData().setInteger("mobdna_zombie_age", MobDNA.zombieChildDelay());
-            } else if(child.getEntityData().getInteger("mobdna_zombie_age") <= 0) {
-                child.setChild(false);
-            } else {
-                child.getEntityData().setInteger("mobdna_zombie_age", child.getEntityData().getInteger("mobdna_zombie_age") - 1);
-            }
-        }
+    public AIShulkerTeleport(EntityShulker shulker) {
+        this.shulker = shulker;
+        this.setMutexBits(8);
     }
 
+    @Override
+    public boolean shouldExecute() {
+        return this.shulker.world.getEntitiesWithinAABB(EntityShulker.class, this.shulker.getEntityBoundingBox()).size() > 1;
+    }
+
+    @Override
+    public boolean continueExecuting() {
+        return false;
+    }
+
+    @Override
+    public void startExecuting() {
+        for(EntityShulker shulker : this.shulker.world.getEntitiesWithinAABB(EntityShulker.class, this.shulker.getEntityBoundingBox())) {
+            shulker.move(MoverType.SHULKER_BOX, 0, 0, 0);
+        }
+    }
 }

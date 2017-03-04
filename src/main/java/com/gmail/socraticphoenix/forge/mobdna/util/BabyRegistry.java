@@ -21,6 +21,7 @@
  */
 package com.gmail.socraticphoenix.forge.mobdna.util;
 
+import com.gmail.socraticphoenix.forge.mobdna.MobDNA;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityCreature;
@@ -56,7 +57,7 @@ public class BabyRegistry {
 
         register(EntityAgeable.class, e -> {
             EntityAgeable ageable = (EntityAgeable) e;
-            ageable.setGrowingAge(-24000);
+            ageable.setGrowingAge(MobDNA.ageableAnimalDelay());
         }, e -> {
             EntityAgeable ageable = (EntityAgeable) e;
             return ageable.isChild();

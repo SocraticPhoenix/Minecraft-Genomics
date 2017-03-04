@@ -24,7 +24,6 @@ package com.gmail.socraticphoenix.forge.mobdna.dna.impl;
 import com.gmail.socraticphoenix.forge.mobdna.dna.Chromosome;
 import com.gmail.socraticphoenix.forge.mobdna.dna.GeneticComponents;
 import com.gmail.socraticphoenix.forge.mobdna.dna.Genome;
-import net.minecraft.entity.EntityCreature;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
@@ -37,8 +36,6 @@ public class HaploidGenome implements Genome {
     private List<List<Chromosome>> genome;
 
     public HaploidGenome() {
-        EntityCreature creature = null;
-
         this.chromosomes = new ArrayList<>();
         this.genome = new ArrayList<>();
         this.genome.add(this.chromosomes);

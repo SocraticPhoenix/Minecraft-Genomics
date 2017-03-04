@@ -21,8 +21,8 @@
  */
 package com.gmail.socraticphoenix.forge.mobdna.ai;
 
-import com.gmail.socraticphoenix.forge.mobdna.capability.GenomeHandler;
-import com.gmail.socraticphoenix.forge.mobdna.capability.GenomeProvider;
+import com.gmail.socraticphoenix.forge.mobdna.capability.genome.GenomeHandler;
+import com.gmail.socraticphoenix.forge.mobdna.capability.genome.GenomeProvider;
 import com.gmail.socraticphoenix.forge.mobdna.util.BabyHelper;
 import com.gmail.socraticphoenix.forge.mobdna.util.BabyRegistry;
 import net.minecraft.entity.EntityCreature;
