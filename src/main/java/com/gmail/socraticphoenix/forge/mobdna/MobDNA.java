@@ -33,6 +33,7 @@ import com.gmail.socraticphoenix.forge.mobdna.capability.setup.SetupHandlerImpl;
 import com.gmail.socraticphoenix.forge.mobdna.capability.setup.SetupStorage;
 import com.gmail.socraticphoenix.forge.mobdna.dna.GeneApplicator;
 import com.gmail.socraticphoenix.forge.mobdna.module.ZombieGrower;
+import com.gmail.socraticphoenix.forge.mobdna.tick.UpdateListener;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.config.ConfigCategory;
@@ -56,6 +57,7 @@ public class MobDNA {
         MinecraftForge.EVENT_BUS.register(new SetupApplicator());
         MinecraftForge.EVENT_BUS.register(new GeneApplicator());
         MinecraftForge.EVENT_BUS.register(new ZombieGrower());
+        MinecraftForge.EVENT_BUS.register(new UpdateListener());
         this.configuration = new Configuration(new File("config" + File.separator + "mobdna" + File.separator + "conf.cfg"));
         MobDNA.instance = this;
     }

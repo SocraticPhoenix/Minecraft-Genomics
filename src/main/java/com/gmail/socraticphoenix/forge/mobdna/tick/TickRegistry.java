@@ -21,5 +21,42 @@
  */
 package com.gmail.socraticphoenix.forge.mobdna.tick;
 
+import net.minecraft.entity.EntityCreature;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.Consumer;
+
 public class TickRegistry {
+    public static final TickRegistry INSTANCE = new TickRegistry();
+
+    private Map<UUID, List<Consumer<EntityCreature>>> listeners;
+
+    public TickRegistry() {
+        this.listeners = new HashMap<>();
+    }
+
+    private void ensureExistence(UUID id) {
+        if(!this.listeners.containsKey(id)) {
+            this.listeners.put(id, new ArrayList<>());
+        }
+    }
+
+    public void register(UUID id, Consumer<EntityCreature> listener) {
+        this.ensureExistence(id);
+        this.listeners.get(id).add(listener);
+    }
+
+    public void remove(UUID id) {
+        this.listeners.remove(id);
+    }
+
+    public Collection<Consumer<EntityCreature>> listeners(UUID id) {
+        return this.listeners.get(id);
+    }
+
 }

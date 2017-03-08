@@ -21,5 +21,36 @@
  */
 package com.gmail.socraticphoenix.forge.mobdna.tick;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.Collection;
+import java.util.function.Consumer;
+
 public class UpdateListener {
+
+    @SubscribeEvent
+    public void onUpdate(LivingEvent.LivingUpdateEvent ev) {
+        Entity entity = ev.getEntity();
+        if(entity instanceof EntityCreature) {
+            EntityCreature creature = (EntityCreature) entity;
+            Collection<Consumer<EntityCreature>> listeners = TickRegistry.INSTANCE.listeners(creature.getPersistentID());
+            if(listeners != null) {
+                listeners.forEach(c -> c.accept(creature));
+            }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onDeath(LivingDeathEvent ev) {
+        Entity entity = ev.getEntity();
+        if(entity instanceof EntityCreature) {
+            TickRegistry.INSTANCE.remove(entity.getPersistentID());
+        }
+    }
+
 }
